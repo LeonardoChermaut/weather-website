@@ -5,6 +5,8 @@ const countryEl = document.getElementById("country");
 const currentTempEl = document.getElementById("current-temp");
 const weatherForecastEl = document.getElementById("weather-forecast");
 const currentWeatherItemsEl = document.getElementById("current-weather-items");
+const cityInput = document.querySelector("#city-input");
+const searchBtn = document.querySelector("#search");
 
 const days = [
   "Domingo",
@@ -31,7 +33,6 @@ const months = [
 ];
 
 const API_KEY = "49cc8c821cd2aff9af04c9f98c36eb74";
-
 setInterval(() => {
   const time = new Date();
   const day = time.getDay();
@@ -50,31 +51,39 @@ setInterval(() => {
     `<span id="am-pm">${ampm}</span>`;
 }, 1000);
 
+const searchWeatherData = async (city) => {
+  const searchWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=pt_br`;
+
+  const response = await fetch(searchWeather);
+  const data = await response.json();
+};
+
+searchBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  const city = cityInput.value;
+});
+
 const getWeatherData = () => {
-  navigator.geolocation.getCurrentPosition((success) => {
+  navigator.geolocation.getCurrentPosition(async (success) => {
     const { latitude, longitude } = success.coords;
-    fetch(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        data.daily.map((day) => {
-          currentTempEl.innerHTML = `
+    const weatherApi = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}&lang=pt_br`;
+    const response = await fetch(weatherApi);
+    const data = await response.json();
+
+    data.daily.map((day) => {
+      currentTempEl.innerHTML = `
               <img src="http://openweathermap.org/img/wn//${
                 day.weather[0].icon
               }@4x.png" alt="weather icon" class="w-icon">
               <div class="other">
-                  <div class="day">${window
-                    .moment(day.dt * 1000)
-                    .format("dddd")}</div>
+                  <div class="day">${window.moment().format("dddd")}</div>
                   <div class="temp">Night - ${day.temp.night}&#176;C</div>
                   <div class="temp">Day - ${day.temp.day}&#176;C</div>
               </div>
               `;
-        });
-        showWeatherData(data);
-      });
+    });
+
+    showWeatherData(data);
   });
 };
 
@@ -82,7 +91,7 @@ getWeatherData();
 
 const showWeatherData = (data) => {
   const { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
-  timezone.innerHTML = data.timezone.replace('_', " ");
+  timezone.innerHTML = data.timezone.replace("_", " ");
   countryEl.innerHTML = data.lat + "N " + data.lon + "E";
   currentWeatherItemsEl.innerHTML = `<div class="weather-item">
         <div>Humidity</div>
