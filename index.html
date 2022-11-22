@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>Previsão do Tempo</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="current-info">
+        <div class="date-container">
+          <div class="time" id="time">12:30 <span id="am-pm">PM</span></div>
+          <div class="date" id="date">Segunda, 25 Maio</div>
+          <div class="others" id="current-weather-items"></div>
+        </div>
+        <div class="place-container">
+          <div class="time-zone" id="time-zone">Brasil/Rio De Janeiro</div>
+          <div id="country" class="country">IN</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="future-forecast">
+      <div class="today" id="current-temp">
+        <img
+          src="http://openweathermap.org/img/wn/10d@2x.png"
+          alt="weather icon"
+          class="w-icon"
+        />
+        <div class="other">
+          <div class="day">Segunda</div>
+          <div class="temp">Noite - 25.6&#176; C</div>
+          <div class="temp">Dia - 35.6&#176; C</div>
+        </div>
+      </div>
+
+      <div class="weather-forecast" id="weather-forecast">
+        <div class="weather-forecast-item">
+          <div class="day">Terça</div>
+          <img
+            src="http://openweathermap.org/img/wn/10d@2x.png"
+            alt="weather icon"
+            class="w-icon"
+          />
+          <div class="temp">Noite - 25.6&#176; C</div>
+          <div class="temp">Dia - 35.6&#176; C</div>
+        </div>
+        <div class="weather-forecast-item">
+          <div class="day">Quarta</div>
+          <img
+            src="http://openweathermap.org/img/wn/10d@2x.png"
+            alt="weather icon"
+            class="w-icon"
+          />
+          <div class="temp">Noite - 25.6&#176; C</div>
+          <div class="temp">Dia- 35.6&#176; C</div>
+        </div>
+        <div class="weather-forecast-item">
+          <div class="day">Quinta</div>
+          <img
+            src="http://openweathermap.org/img/wn/10d@2x.png"
+            alt="weather icon"
+            class="w-icon"
+          />
+          <div class="temp">Noite - 25.6&#176; C</div>
+          <div class="temp">Dia - 35.6&#176; C</div>
+        </div>
+        <div class="weather-forecast-item">
+          <div class="day">Sexta</div>
+          <img
+            src="http://openweathermap.org/img/wn/10d@2x.png"
+            alt="weather icon"
+            class="w-icon"
+          />
+          <div class="temp">Noite - 25.6&#176; C</div>
+          <div class="temp">Dia - 35.6&#176; C</div>
+        </div>
+        <div class="weather-forecast-item">
+          <div class="day">Sáb</div>
+          <img
+            src="http://openweathermap.org/img/wn/10d@2x.png"
+            alt="weather icon"
+            class="w-icon"
+          />
+          <div class="temp">Noite - 25.6&#176; C</div>
+          <div class="temp">Dia - 35.6&#176; C</div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/src/index.js"></script>
+  </body>
+</html>
