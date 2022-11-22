@@ -51,9 +51,8 @@ setInterval(() => {
     `<span id="am-pm">${ampm}</span>`;
 }, 1000);
 
-const searchWeatherData = async (city) => {
+const getWeatherByCityName = async (city) => {
   const searchWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=pt_br`;
-
   const response = await fetch(searchWeather);
   const data = await response.json();
 };
@@ -61,9 +60,10 @@ const searchWeatherData = async (city) => {
 searchBtn.addEventListener("click", (e) => {
   e.preventDefault();
   const city = cityInput.value;
+  getWeatherByCityName(city);
 });
 
-const getWeatherData = () => {
+const getWeatherByGeolocation = () => {
   navigator.geolocation.getCurrentPosition(async (success) => {
     const { latitude, longitude } = success.coords;
     const weatherApi = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}&lang=pt_br`;
@@ -83,13 +83,15 @@ const getWeatherData = () => {
               `;
     });
 
-    showWeatherData(data);
+    showWeatherByGeolocation(data);
   });
 };
 
-getWeatherData();
+getWeatherByGeolocation();
 
-const showWeatherData = (data) => {
+const showWeatherByCityName = (city) => getWeatherByCityName(city);
+
+const showWeatherByGeolocation = (data) => {
   const { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
   timezone.innerHTML = data.timezone.replace("_", " ");
   countryEl.innerHTML = data.lat + "N " + data.lon + "E";
