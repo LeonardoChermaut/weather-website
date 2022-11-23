@@ -1,18 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400;700&display=swap");
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
+  background: url("https://images.unsplash.com/photo-1621274403997-37aace184f49?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1");
   height: 100vh;
   overflow: hidden;
   background-size: cover;
   background-repeat: no-repeat;
   font-family: "Poppins", sans-serif;
-  background: url("https://images.unsplash.com/photo-1621274403997-37aace184f49?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1");
 }
 
 .container {
@@ -48,8 +48,8 @@ body {
 #search {
   width: 3rem;
   height: 2.5rem;
-  border-radius: 0.5rem;
   border: none;
+  border-radius: 0.5rem;
   background-color: transparent;
 }
 #search:hover {

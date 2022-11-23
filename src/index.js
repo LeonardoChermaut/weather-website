@@ -69,7 +69,7 @@ const getWeatherByCityName = async (city) => {
 
 getWeatherByCityName();
 
-function toPascalCase(string) {
+const toPascalCase = (string) => {
   return `${string}`
     .toLowerCase()
     .replace(new RegExp(/[-_]+/, "g"), " ")
@@ -79,7 +79,7 @@ function toPascalCase(string) {
       ($1, $2, $3) => `${$2.toUpperCase() + $3}`
     )
     .replace(new RegExp(/\w/), (s) => s.toUpperCase());
-}
+};
 
 const showWeatherByCityName = async (city) => {
   const data = await getWeatherByCityName(city);
@@ -142,7 +142,7 @@ const getWeatherByGeolocation = () => {
   });
 };
 
-// getWeatherByGeolocation();
+getWeatherByGeolocation();
 
 const showWeatherByGeolocation = (data) => {
   const { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
