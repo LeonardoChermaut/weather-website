@@ -51,16 +51,71 @@ setInterval(() => {
     `<span id="am-pm">${ampm}</span>`;
 }, 1000);
 
+input = document.getElementById("city-input");
+input.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("search").click();
+  }
+});
+
 const getWeatherByCityName = async (city) => {
-  const searchWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=pt_br`;
-  const response = await fetch(searchWeather);
+  const weatherCity = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=pt_br`;
+  const response = await fetch(weatherCity);
   const data = await response.json();
+
+  return data;
+};
+
+getWeatherByCityName();
+
+function toPascalCase(string) {
+  return `${string}`
+    .toLowerCase()
+    .replace(new RegExp(/[-_]+/, "g"), " ")
+    .replace(new RegExp(/[^\w\s]/, "g"), "")
+    .replace(
+      new RegExp(/\s+(.)(\w*)/, "g"),
+      ($1, $2, $3) => `${$2.toUpperCase() + $3}`
+    )
+    .replace(new RegExp(/\w/), (s) => s.toUpperCase());
+}
+
+const showWeatherByCityName = async (city) => {
+  const data = await getWeatherByCityName(city);
+  console.log(data);
+  timezone.innerHTML = data.name;
+  countryEl.innerHTML = "LA: " + data.coord.lat + " LO: " + data.coord.lon;
+  const sunrise = data.sys.sunrise;
+  const sunset = data.sys.sunset;
+  const description = toPascalCase(data.weather[0].description);
+  currentWeatherItemsEl.innerHTML = `<div class="weather-item">
+        <div>Máxima</div>
+        <div>${data.main.temp_max}</div>
+    </div>
+    <div class="weather-item">
+        <div>Mínima</div>
+        <div>${data.main.temp_min}</div>
+    </div>
+    <div class="weather-item">
+        <div>Condição</div>
+        <div>${description}</div>
+    </div>
+    <div class="weather-item">
+        <div>Nascer do sol</div>
+        <div>${window.moment(sunrise * 1000).format("HH:mm a")}</div>
+    </div>
+    <div class="weather-item">
+        <div>Por do sol</div>
+        <div>${window.moment(sunset * 1000).format("HH:mm a")}</div>
+    </div>
+    `;
 };
 
 searchBtn.addEventListener("click", (e) => {
   e.preventDefault();
   const city = cityInput.value;
-  getWeatherByCityName(city);
+  showWeatherByCityName(city);
 });
 
 const getWeatherByGeolocation = () => {
@@ -87,9 +142,7 @@ const getWeatherByGeolocation = () => {
   });
 };
 
-getWeatherByGeolocation();
-
-const showWeatherByCityName = (city) => getWeatherByCityName(city);
+// getWeatherByGeolocation();
 
 const showWeatherByGeolocation = (data) => {
   const { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
