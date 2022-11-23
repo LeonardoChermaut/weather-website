@@ -81,21 +81,22 @@ const toPascalCase = (string) => {
     .replace(new RegExp(/\w/), (s) => s.toUpperCase());
 };
 
-const showWeatherByCityName = async (city) => {
-  const data = await getWeatherByCityName(city);
-  console.log(data);
+const mainInfoWeather = (data) => {
+  const maxTemp = data.main.temp_min;
+  const minTemp = data.main.temp_max;
+  const description = toPascalCase(data.weather[0].description);
+  const sunset = window.moment(data.sys.sunset * 1000).format("HH:mm a");
+  const sunrise = window.moment(data.sys.sunrise * 1000).format("HH:mm a");
   timezone.innerHTML = data.name;
   countryEl.innerHTML = "LA: " + data.coord.lat + " LO: " + data.coord.lon;
-  const sunrise = data.sys.sunrise;
-  const sunset = data.sys.sunset;
-  const description = toPascalCase(data.weather[0].description);
-  currentWeatherItemsEl.innerHTML = `<div class="weather-item">
+
+  return `<div class="weather-item">
         <div>Máxima</div>
-        <div>${data.main.temp_max}</div>
+        <div>${maxTemp}</div>
     </div>
     <div class="weather-item">
         <div>Mínima</div>
-        <div>${data.main.temp_min}</div>
+        <div>${minTemp}</div>
     </div>
     <div class="weather-item">
         <div>Condição</div>
@@ -103,13 +104,18 @@ const showWeatherByCityName = async (city) => {
     </div>
     <div class="weather-item">
         <div>Nascer do sol</div>
-        <div>${window.moment(sunrise * 1000).format("HH:mm a")}</div>
+        <div>${sunrise}</div>
     </div>
     <div class="weather-item">
         <div>Por do sol</div>
-        <div>${window.moment(sunset * 1000).format("HH:mm a")}</div>
+        <div>${sunset}</div>
     </div>
     `;
+};
+
+const showWeatherByCityName = async (city) => {
+  const data = await getWeatherByCityName(city);
+  currentWeatherItemsEl.innerHTML = await mainInfoWeather(data);
 };
 
 searchBtn.addEventListener("click", (e) => {
