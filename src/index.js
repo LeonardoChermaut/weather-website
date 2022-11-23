@@ -130,16 +130,17 @@ const getWeatherByGeolocation = () => {
     const weatherApi = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}&lang=pt_br`;
     const response = await fetch(weatherApi);
     const data = await response.json();
-
     data.daily.map((day) => {
+      let imgIcon = day.weather[0].icon;
+      let tempNight = day.temp.nigh;
+      let tempDay = day.temp.day;
+      let date = window.moment().format("dddd");
       currentTempEl.innerHTML = `
-              <img src="http://openweathermap.org/img/wn//${
-                day.weather[0].icon
-              }@4x.png" alt="weather icon" class="w-icon">
+              <img src="http://openweathermap.org/img/wn//${imgIcon}@4x.png" alt="weather icon" class="w-icon">
               <div class="other">
-                  <div class="day">${window.moment().format("dddd")}</div>
-                  <div class="temp">Night - ${day.temp.night}&#176;C</div>
-                  <div class="temp">Day - ${day.temp.day}&#176;C</div>
+                  <div class="day">${date}</div>
+                  <div class="temp">Night - ${tempNight}&#176;C</div>
+                  <div class="temp">Day - ${tempDay}&#176;C</div>
               </div>
               `;
     });
