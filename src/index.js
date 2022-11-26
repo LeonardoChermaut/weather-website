@@ -59,12 +59,12 @@ input.addEventListener("keypress", (e) => {
   }
 });
 
-const getWeatherByCityName = async (city) => {
-  const weatherCity = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=pt_br`;
+const getWeatherByCityName = async (name) => {
+  const weatherCity = `https://api.openweathermap.org/data/2.5/weather?q=${name}&units=metric&appid=${API_KEY}&lang=pt_br`;
   const response = await fetch(weatherCity);
-  const data = await response.json();
+  const {data: city} = await response.json();
 
-  return data;
+  return city;
 };
 
 getWeatherByCityName();
@@ -81,14 +81,14 @@ const toPascalCase = (string) => {
     .replace(new RegExp(/\w/), (s) => s.toUpperCase());
 };
 
-const mainInfoWeather = (data) => {
-  const maxTemp = data.main.temp_min;
-  const minTemp = data.main.temp_max;
-  const description = toPascalCase(data.weather[0].description);
-  const sunset = window.moment(data.sys.sunset * 1000).format("HH:mm a");
-  const sunrise = window.moment(data.sys.sunrise * 1000).format("HH:mm a");
-  timezone.innerHTML = data.name;
-  countryEl.innerHTML = "LA: " + data.coord.lat + " LO: " + data.coord.lon;
+const mainInfoWeather = (city) => {
+  const maxTemp = city.main.temp_min;
+  const minTemp = city.main.temp_max;
+  const description = toPascalCase(city.weather[0].description);
+  const sunset = window.moment(city.sys.sunset * 1000).format("HH:mm a");
+  const sunrise = window.moment(city.sys.sunrise * 1000).format("HH:mm a");
+  timezone.innerHTML = city.name;
+  countryEl.innerHTML = "LA: " + city.coord.lat + " LO: " + city.coord.lon;
 
   return `<div class="weather-item">
         <div>Máxima</div>
@@ -113,15 +113,15 @@ const mainInfoWeather = (data) => {
     `;
 };
 
-const showWeatherByCityName = async (city) => {
-  const data = await getWeatherByCityName(city);
-  currentWeatherItemsEl.innerHTML = await mainInfoWeather(data);
+const showWeatherByCityName = async (name) => {
+  const city = await getWeatherByCityName(name);
+  currentWeatherItemsEl.innerHTML = await mainInfoWeather(city);
 };
 
 searchBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  const city = cityInput.value;
-  showWeatherByCityName(city);
+  const name = cityInput.value;
+  showWeatherByCityName(name);
 });
 
 const getWeatherByGeolocation = () => {
@@ -129,8 +129,8 @@ const getWeatherByGeolocation = () => {
     const { latitude, longitude } = success.coords;
     const weatherApi = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}&lang=pt_br`;
     const response = await fetch(weatherApi);
-    const data = await response.json();
-    data.daily.map((day) => {
+    const location = await response.json();
+    location.daily.map((day) => {
       let imgIcon = day.weather[0].icon;
       let tempNight = day.temp.nigh;
       let tempDay = day.temp.day;
@@ -145,16 +145,16 @@ const getWeatherByGeolocation = () => {
               `;
     });
 
-    showWeatherByGeolocation(data);
+    showWeatherByGeolocation(location);
   });
 };
 
 getWeatherByGeolocation();
 
-const showWeatherByGeolocation = (data) => {
-  const { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
-  timezone.innerHTML = data.timezone.replace("_", " ");
-  countryEl.innerHTML = data.lat + "N " + data.lon + "E";
+const showWeatherByGeolocation = (location) => {
+  const { humidity, pressure, sunrise, sunset, wind_speed } = location.current;
+  timezone.innerHTML = location.timezone.replace("_", " ");
+  countryEl.innerHTML = location.lat + "N " + location.lon + "E";
   currentWeatherItemsEl.innerHTML = `<div class="weather-item">
         <div>Humidity</div>
         <div>${humidity}%</div>
